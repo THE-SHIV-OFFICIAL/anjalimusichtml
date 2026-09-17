@@ -1,13 +1,15 @@
 FROM python:3.12-slim-bookworm
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg && \
+    apt-get install -y --no-install-recommends ffmpeg gcc python3-dev && \
     rm -rf /var/lib/apt/lists/*
 
 COPY . /app/
 WORKDIR /app/
 
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools && \
-    python -m pip install --no-cache-dir -r requirements.txt
+    python -m pip install --no-cache-dir -r requirements.txt && \
+    apt-get purge -y gcc python3-dev && \
+    apt-get autoremove -y
 
 CMD ["python", "-m", "SHIVMUSIC"]
